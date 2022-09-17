@@ -1,20 +1,9 @@
 import sys
 import jieba
-import jieba.analyse
 import Levenshtein
 
 
-class Main:
-    def getPath(self):
-        try:
-            orig_path = sys.argv[1]
-            siml_path = sys.argv[2]
-            rst_path = sys.argv[3]
-        except:
-            print("格式错误！请按下列格式输入：\n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]")
-        # return "source/orig.txt", "source/orig_0.8_add.txt", "source/result.txt"
-        return orig_path, siml_path, rst_path
-
+class TextSiml:
     def openFile(self, paths):
         try:
             orig_file = open(paths[0], mode="r", encoding="utf-8")
@@ -51,8 +40,7 @@ class Main:
         print("相似度计算成功！相似度为：", result)
         return str(result)
 
-    def start(self):
-        paths = self.getPath()
+    def start(self, paths):
         files = self.openFile(paths)
         txts = self.readFile(files)
         result = self.calculate(txts)
@@ -61,4 +49,11 @@ class Main:
 
 
 if __name__ == "__main__":
-    Main().start()
+    try:
+        orig_path = sys.argv[1]
+        siml_path = sys.argv[2]
+        rst_path = sys.argv[3]
+    except:
+        print("格式错误！请按下列格式输入：\n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]")
+    # 调用模块
+    TextSiml.start(orig_path, siml_path, rst_path)
