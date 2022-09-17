@@ -1,6 +1,7 @@
 import sys
+import jieba
+import jieba.analyse
 import Levenshtein
-from numpy import zeros
 
 
 class Main:
@@ -11,7 +12,7 @@ class Main:
             rst_path = sys.argv[3]
         except:
             print("格式错误！请按下列格式输入：\n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]")
-        return "source/orig.txt", "source/orig_0.8_add.txt", "source/result.txt"
+        # return "source/orig.txt", "source/orig_0.8_add.txt", "source/result.txt"
         return orig_path, siml_path, rst_path
 
     def openFile(self, paths):
@@ -42,27 +43,11 @@ class Main:
     def calculate(self, strs):
 
         # 分词
-        len_0 = len(strs[0])
-        len_1 = len(strs[1])
-
-        matrix = zeros((2, len_1 + 1), dtype=int)
-        curr_i = 0
-
-        for i in range(len_0 + 1):
-            for j in range(len_1 + 1):
-                if min(i, j) == 0:
-                    matrix[curr_i][j] = max(i, j)
-                    continue
-                len_sub_a = matrix[1 - curr_i][j] + 1
-                len_sub_b = matrix[curr_i][j - 1] + 1
-                len_sub_a_b = matrix[1 - curr_i][j - 1] + (
-                    1 if strs[0][i - 1] != strs[1][j - 1] else 0
-                )
-                matrix[curr_i][j] = min(len_sub_a, len_sub_b, len_sub_a_b)
-            curr_i = 1 - curr_i
+        orig = jieba.lcut(strs[0])
+        siml = jieba.lcut(strs[1])
 
         # 计算相似度
-        result = matrix[1 - curr_i][-1]
+        result = Levenshtein.ratio(orig, siml)
         print("相似度计算成功！相似度为：", result)
         return str(result)
 
