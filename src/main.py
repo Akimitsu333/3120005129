@@ -10,24 +10,24 @@ class TextSiml:
             siml_file = open(paths[1], mode="r", encoding="utf-8")
             rst_file = open(paths[2], mode="w", encoding="utf-8")
         except IOError as e:
-            print("文件打开出错，错误类型为：", e)
-        print("文件打开成功！")
+            print("Error opening file: ", e)
+        print("File opened successfully!")
         return orig_file, siml_file, rst_file
 
     def closeFile(self, files):
         for file in files:
             file.close()
-        print("文件保存成功！")
+        print("File saved successfully!")
 
     def readFile(self, files):
         orig_str = files[0].read()
         siml_str = files[1].read()
-        print("文件读取成功！")
+        print("File read successfully!")
         return orig_str, siml_str
 
     def writeFile(self, files, str):
         files[2].write(str)
-        print("文件写入成功！")
+        print("File written successfully!")
 
     def calculate(self, strs):
 
@@ -37,23 +37,29 @@ class TextSiml:
 
         # 计算相似度
         result = Levenshtein.ratio(orig, siml)
-        print("相似度计算成功！相似度为：", result)
-        return str(result)
+        # 转化为百分比
+        result = result * 100
+        print("Similarity calculation succeeded: {0:.1f}%".format(result))
+        return result
 
     def start(self, paths):
         files = self.openFile(paths)
         txts = self.readFile(files)
         result = self.calculate(txts)
-        self.writeFile(files, result)
+        self.writeFile(
+            files,
+            "The similarity between {0} and {1} is: {2:.1f}%".format(
+                paths[0], paths[1], result
+            ),
+        )
         self.closeFile(files)
 
 
 if __name__ == "__main__":
-    try:
-        orig_path = sys.argv[1]
-        siml_path = sys.argv[2]
-        rst_path = sys.argv[3]
-    except:
-        print("格式错误！请按下列格式输入：\n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]")
-    # 调用模块
-    TextSiml.start(orig_path, siml_path, rst_path)
+    if len(sys.argv) != 4:
+        print(
+            "Format error! Please enter in the following format: \n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]"
+        )
+    else:
+        # 调用模块
+        TextSiml().start(sys.argv[1:4])
