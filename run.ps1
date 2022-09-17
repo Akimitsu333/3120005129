@@ -1,0 +1,1 @@
+py src/main.py source/orig.txt source/orig_0.8_dis_10.txt source/result.txt
