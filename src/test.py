@@ -8,7 +8,7 @@ from main import TextSiml
 class TestStudent(unittest.TestCase):
     def test_time(self):
         cProfile.run(
-            'Main().start(["source/orig.txt", "source/orig_0.8_add.txt", "source/result.txt"])'
+            'TextSiml().start(["source/orig.txt", "source/orig_0.8_add.txt", "source/result.txt"])'
         )
 
     @profile
