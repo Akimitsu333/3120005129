@@ -1,6 +1,4 @@
 import sys
-import jieba.analyse
-import simhash
 
 
 class Main:
@@ -40,11 +38,29 @@ class Main:
 
     def calculate(self, strs):
         # 分词
-        orig_list = jieba.analyse.extract_tags(strs[0], withWeight=True)
-        siml_list = jieba.analyse.extract_tags(strs[1], withWeight=True)
+        m = len(strs[0])
+        n = len(strs[1])
+        lensum = float(m + n)
+        d = []
+        for i in range(m + 1):
+            d.append([i])
+        del d[0][0]
+        for j in range(n + 1):
+            d[0].append(j)
+        for j in range(1, n + 1):
+            for i in range(1, m + 1):
+                if strs[0][i - 1] == strs[1][j - 1]:
+                    d[i].insert(j, d[i - 1][j - 1])
+                else:
+                    minimum = min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + 2)
+                    d[i].insert(j, minimum)
+        ldist = d[-1][-1]
+        ratio = (lensum - ldist) / lensum
+        # 计算相似度
+        result = ratio
 
         print("相似度计算成功！相似度为：", result)
-        return result
+        return str(result)
 
     def start(self):
         paths = self.getPath()
