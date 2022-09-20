@@ -72,7 +72,6 @@ class TestStudent(unittest.TestCase):
         )
         t1.result = 0.80  # 测试文本,可随机
         self.assertTrue(t1.write_file())  # 文件写入正常
-        t1.close_file()
 
         pass
 
