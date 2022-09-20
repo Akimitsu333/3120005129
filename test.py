@@ -10,13 +10,9 @@ class TestStudent(unittest.TestCase):
         self.assertEqual(t1.paths, None)
         self.assertEqual(t1.strs, None)
         self.assertEqual(t1.result, None)
-        pass
 
-    def test_get_path(self):
+    def test_get_path_1(self):
         t1 = textsiml.TextSiml()
-        with self.assertRaises(Exception) as cm:  # 参数格式错误会报错
-            t1.get_path()
-        self.assertIsNotNone(cm.exception)  # 判断是否有报错
         sys.argv = [  # 模拟命令行参数
             "main.py",
             "source/orig.txt",
@@ -24,9 +20,22 @@ class TestStudent(unittest.TestCase):
             "result.txt",
         ]
         self.assertTrue(t1.get_path())  # 参数数量正确,获取路径值正常
-        pass
 
-    def test_read_file(self):
+    def test_get_path_2(self):
+        t1 = textsiml.TextSiml()
+        sys.args = ["aaa"]  # 模拟错误的命令行参数
+        with self.assertRaises(Exception) as cm:  # 参数格式错误会报错
+            t1.get_path()
+        self.assertIsNotNone(cm.exception)  # 判断是否有报错
+
+    def test_get_path_3(self):
+        t1 = textsiml.TextSiml()
+        sys.args = ["no.1", "2", "3", "4", "5"]  # 模拟错误的命令行参数
+        with self.assertRaises(Exception) as cm:  # 参数格式错误会报错
+            t1.get_path()
+        self.assertIsNotNone(cm.exception)  # 判断是否有报错
+
+    def test_read_file_1(self):
         t1 = textsiml.TextSiml()
         t1.paths = (
             "source/orig.txt",
@@ -34,6 +43,9 @@ class TestStudent(unittest.TestCase):
             "result.txt",
         )
         self.assertTrue(t1.read_file())  # 文件存在,打开正常
+
+    def test_read_file_2(self):
+        t1 = textsiml.TextSiml()
         t1.paths = (
             "source/aaa",
             "source/orig_0.8_dis_1.txt",
@@ -42,6 +54,9 @@ class TestStudent(unittest.TestCase):
         with self.assertRaises(IOError) as cm:
             t1.read_file()
         self.assertIsNotNone(cm.exception)  # 文件不存在,会报错
+
+    def test_read_file_3(self):
+        t1 = textsiml.TextSiml()
         t1.paths = (
             "source/orig.txt",
             "source/bbb",
@@ -50,6 +65,9 @@ class TestStudent(unittest.TestCase):
         with self.assertRaises(IOError) as cm:
             t1.read_file()
         self.assertIsNotNone(cm.exception)  # 文件不存在,会报错
+
+    def test_read_file_4(self):
+        t1 = textsiml.TextSiml()
         t1.paths = (
             "source/orig.txt",
             "source/orig_0.8_dis_1.txt",
@@ -58,8 +76,6 @@ class TestStudent(unittest.TestCase):
         with self.assertRaises(IOError) as cm:
             t1.read_file()
         self.assertIsNotNone(cm.exception)  # 文件不存在,会报错
-
-        pass
 
     def test_write_file(self):
         t1 = textsiml.TextSiml()
@@ -70,8 +86,6 @@ class TestStudent(unittest.TestCase):
         )
         t1.result = 0.80  # 测试文本,可随机
         self.assertTrue(t1.write_file())  # 文件写入正常
-
-        pass
 
     def test_calculate(self):
         t1 = textsiml.TextSiml()
@@ -84,7 +98,6 @@ class TestStudent(unittest.TestCase):
         self.assertTrue(t1.calculate())  # 计算运行正常
         print(t1.result)
         self.assertEqual(t1.result, 0.8)  # 测试结果符合预期
-        pass
 
     def test_start(self):
         t1 = textsiml.TextSiml()
@@ -94,7 +107,6 @@ class TestStudent(unittest.TestCase):
             "result.txt",
         )
         self.assertTrue(t1.start())  # 模块启动正常
-        pass
 
     def test_main(self):
         sys.argv = [  # 模拟命令行参数
@@ -104,7 +116,6 @@ class TestStudent(unittest.TestCase):
             "result.txt",
         ]
         self.assertTrue(main.main())  # 测试主入口
-        pass
 
 
 # 入口
