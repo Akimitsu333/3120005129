@@ -10,17 +10,14 @@ class TextSiml:
         self.strs = None
         self.result = None
 
-    def getResult(self):
-        return self.result
-
     def getPath(self):
-        if self.paths != None:
-            return True
-        if len(sys.argv) != 4:
-            print(
-                "Format error! Please enter in the following format: \n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]"
-            )
-        self.paths = sys.argv[1:4]
+        if self.paths == None:
+            if len(sys.argv) != 4:
+                print(
+                    "Format error! Please enter in the following format: \n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]"
+                )
+            else:
+                self.paths = sys.argv[1:4]
         return True
 
     def openFile(self):
@@ -48,7 +45,7 @@ class TextSiml:
         return True
 
     def writeFile(self):
-        self.files[2].write(self.strs)
+        self.files[2].write(str(self.result))
         print("File written successfully.")
         return True
 
@@ -61,7 +58,7 @@ class TextSiml:
         # 四舍五入到小数点后两位
         self.result = round(result, 2)
         # 输出相似度
-        print("Similarity calculation succeeded: {0:.1f}%".format(self.result))
+        print("Similarity calculation succeeded: {0}".format(self.result))
         return True
 
     def start(self):
