@@ -1,17 +1,46 @@
+from crypt import methods
 import unittest
 import textsiml
 
 
 class TestStudent(unittest.TestCase):
-    def test_init(self):
+    @methods
+    def setUp(self) -> None:
+        t1 = textsiml.TextSiml()
+        t1.paths = (
+            "source/orig.txt ",
+            "source/orig_0.8_dis_1.txt ",
+            "source/result.txt",
+        )
+        return super().setUp()
 
+    def test_init(self):
+        t1 = textsiml.TextSiml()
+        self.assertEqual(t1.paths, None)
+        self.assertEqual(t1.files, None)
+        self.assertEqual(t1.strs, None)
+        self.assertEqual(t1.result, None)
         pass
 
     def test_get_path(self):
-
+        t1 = textsiml.TextSiml()
+        t1.paths = (
+            "source/orig.txt ",
+            "source/orig_0.8_dis_1.txt ",
+            "source/result.txt",
+        )
+        self.assertTrue(t1.get_path())
+        t2 = textsiml.TextSiml()
+        self.assertFalse(t2.get_path())
         pass
 
     def test_open_file(self):
+        t1 = textsiml.TextSiml()
+        t1.paths = (
+            "source/orig.txt ",
+            "source/orig_0.8_dis_1.txt ",
+            "source/result.txt",
+        )
 
         pass
 

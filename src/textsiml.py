@@ -82,7 +82,7 @@ class TextSiml:
         Returns:
             True: 函数正确执行完毕
         """
-        self.files[2].write(str(self.result))
+        self.files[2].write("{0:.2f}".format(self.result))  # 强制保留两位小数
         print("File written successfully.")
 
         return True
@@ -93,15 +93,12 @@ class TextSiml:
         Returns:
             True: 函数正确执行完毕
         """
-        # 分词
-        orig_words = jieba.lcut(self.strs[0])
+        orig_words = jieba.lcut(self.strs[0])  # 分词
         siml_words = jieba.lcut(self.strs[1])
-        # 计算相似度
-        result = Levenshtein.ratio(orig_words, siml_words)
-        # 四舍五入到小数点后两位
-        self.result = round(result, 2)
-        # 输出相似度
-        print("Similarity calculation succeeded: {0}".format(self.result))
+        self.result = Levenshtein.ratio(orig_words, siml_words)  # 计算相似度
+        print(
+            "Similarity calculation succeeded: {0:.2f}".format(self.result)
+        )  # 以两位小数打印相似度
 
         return True
 
