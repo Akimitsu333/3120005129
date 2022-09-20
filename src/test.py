@@ -1,21 +1,45 @@
 import unittest
-
-from textsiml import TextSiml
+import textsiml
 
 
 class TestStudent(unittest.TestCase):
-    def test_time(self):
-        # os.system(
-        #     "python -m cProfile -s cumulative src/main.py source/orig.txt source/orig_0.8_add.txt source/result.txt"
-        # )
+    def test_init(self):
+
         pass
 
-    def test_memory(self):
-        # os.system(
-        #     "python -m memory_profiler src/main.py source/orig.txt source/orig_0.8_add.txt source/result.txt"
-        # )
+    def test_get_path(self):
+
+        pass
+
+    def test_open_file(self):
+
+        pass
+
+    def test_close_file(self):
+
+        pass
+
+    def test_read_file(self):
+
+        pass
+
+    def test_write_file(self):
+
+        pass
+
+    def test_calculate(self):
+
+        pass
+
+    def test_start(self):
+
+        pass
+
+    def test_(self):
+
         pass
 
 
+# 入口
 if __name__ == "__main__":
     unittest.main()
