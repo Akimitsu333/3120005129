@@ -93,8 +93,13 @@ class TextSiml:
         Returns:
             True: 函数正确执行完毕
         """
-        orig_words = jieba.lcut(self.strs[0])  # 分词
-        siml_words = jieba.lcut(self.strs[1])
+        jieba_tokenizer = jieba.Tokenizer()  # 重定向jieba分词的cache
+        jieba_tokenizer.tmp_dir = "."
+        jieba_tokenizer.cache_file = "result.txt"
+
+        orig_words = jieba_tokenizer.lcut(self.strs[0])  # 分词
+        siml_words = jieba_tokenizer.lcut(self.strs[1])
+
         self.result = Levenshtein.ratio(orig_words, siml_words)  # 计算相似度
         print(
             "Similarity calculation succeeded: {0:.2f}".format(self.result)
