@@ -10,7 +10,7 @@ class TextSiml:
         self.strs = None
         self.result = None
 
-    def getPath(self):
+    def get_path(self):
         if self.paths == None:
             if len(sys.argv) != 4:
                 print(
@@ -20,7 +20,7 @@ class TextSiml:
                 self.paths = sys.argv[1:4]
         return True
 
-    def openFile(self):
+    def open_file(self):
         try:
             orig_file = open(self.paths[0], mode="r", encoding="utf-8")
             siml_file = open(self.paths[1], mode="r", encoding="utf-8")
@@ -31,30 +31,30 @@ class TextSiml:
         self.files = orig_file, siml_file, rst_file
         return True
 
-    def closeFile(self):
+    def close_file(self):
         for file in self.files:
             file.close()
         print("File saved successfully.")
         return True
 
-    def readFile(self):
+    def read_file(self):
         orig_str = self.files[0].read()
         siml_str = self.files[1].read()
         print("File read successfully.")
         self.strs = orig_str, siml_str
         return True
 
-    def writeFile(self):
+    def write_file(self):
         self.files[2].write(str(self.result))
         print("File written successfully.")
         return True
 
     def calculate(self):
         # 分词
-        orig = jieba.lcut(self.strs[0])
-        siml = jieba.lcut(self.strs[1])
+        orig_words = jieba.lcut(self.strs[0])
+        siml_words = jieba.lcut(self.strs[1])
         # 计算相似度
-        result = Levenshtein.ratio(orig, siml)
+        result = Levenshtein.ratio(orig_words, siml_words)
         # 四舍五入到小数点后两位
         self.result = round(result, 2)
         # 输出相似度
@@ -62,11 +62,11 @@ class TextSiml:
         return True
 
     def start(self):
-        self.getPath()
-        self.openFile()
-        self.readFile()
+        self.get_path()
+        self.open_file()
+        self.read_file()
         self.calculate()
-        self.writeFile()
-        self.closeFile()
+        self.write_file()
+        self.close_file()
 
         return True
