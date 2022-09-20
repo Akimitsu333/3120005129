@@ -1,4 +1,6 @@
 /venv
 /.vscode
-/result.txt
-/__pycache__
+result.txt
+/src/__pycache__
+/.coverage
+/output.txt
