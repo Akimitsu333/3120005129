@@ -19,7 +19,7 @@ class TextSiml:
         """判断路径是否存在/传入
 
         Returns:
-            bool: 无错为True
+            True: 函数正确执行完毕
         """
         if self.paths == None:  # 默认路径优先级高于命令行传入参数
             if len(sys.argv) != 4:
@@ -28,13 +28,14 @@ class TextSiml:
                 )
             else:
                 self.paths = sys.argv[1:4]
+
         return True
 
     def open_file(self):
         """尝试打开路径对应的文件对象
 
         Returns:
-            bool: 无错为True
+            True: 函数正确执行完毕
         """
         try:
             orig_file = open(self.paths[0], mode="r", encoding="utf-8")
@@ -44,46 +45,50 @@ class TextSiml:
             print("Error opening file: ", e)
         print("File opened successfully.")
         self.files = orig_file, siml_file, rst_file  # 记录打开的文件对象
+
         return True
 
     def close_file(self):
         """关闭打开的文件对象
 
         Returns:
-            bool: 无错为True
+            True: 函数正确执行完毕
         """
         for file in self.files:  # 关闭所有打开的文件对象
             file.close()
         print("File saved successfully.")
+
         return True
 
     def read_file(self):
         """读取待比较文件的内容
 
         Returns:
-            bool: 无错为True
+            True: 函数正确执行完毕
         """
         orig_str = self.files[0].read()  # 读取原文和抄袭
         siml_str = self.files[1].read()
         print("File read successfully.")
         self.strs = orig_str, siml_str
+
         return True
 
     def write_file(self):
         """将结果写入文件result.txt
 
         Returns:
-            bool: 无错为True
+            True: 函数正确执行完毕
         """
         self.files[2].write(str(self.result))
         print("File written successfully.")
+
         return True
 
     def calculate(self):
         """计算相似度
 
         Returns:
-            bool: 无错为True
+            True: 函数正确执行完毕
         """
         # 分词
         orig_words = jieba.lcut(self.strs[0])
@@ -94,13 +99,14 @@ class TextSiml:
         self.result = round(result, 2)
         # 输出相似度
         print("Similarity calculation succeeded: {0}".format(self.result))
+
         return True
 
     def start(self):
         """启动模块
 
         Returns:
-            bool: 无错为True
+            True: 函数正确执行完毕
         """
         self.get_path()  # 依次启动各功能
         self.open_file()
