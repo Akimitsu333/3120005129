@@ -23,14 +23,14 @@ class TestStudent(unittest.TestCase):
 
     def test_get_path_2(self):
         t1 = textsiml.TextSiml()
-        sys.args = ["aaa"]  # 模拟错误的命令行参数
+        sys.argv = ["aaa"]  # 模拟错误的命令行参数
         with self.assertRaises(Exception) as cm:  # 参数格式错误会报错
             t1.get_path()
         self.assertIsNotNone(cm.exception)  # 判断是否有报错
 
     def test_get_path_3(self):
         t1 = textsiml.TextSiml()
-        sys.args = ["no.1", "2", "3", "4", "5"]  # 模拟错误的命令行参数
+        sys.argv = ["no.1", "2", "3", "4", "5", "6"]  # 模拟错误的命令行参数
         with self.assertRaises(Exception) as cm:  # 参数格式错误会报错
             t1.get_path()
         self.assertIsNotNone(cm.exception)  # 判断是否有报错
