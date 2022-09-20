@@ -4,33 +4,32 @@ import Levenshtein
 
 
 class TextSiml:
-    def __init__(self, paths: tuple = None):
+    def __init__(self):
         """初始化全局变量
 
         Args:
             paths (tuple, optional): 默认文件路径参数,用于解决非命令行参数启动模块时无法获取路径的问题. Defaults to None.
         """
-        self.paths = paths
+        self.paths = None
         self.files = None
         self.strs = None
         self.result = None
 
     def get_path(self):
-        """判断路径是否存在/传入
+        """判断路径是否正确传入
 
         Returns:
             False: 执行过程出错
             True: 函数正确执行完毕
         """
-        if self.paths == None:  # 默认路径优先级高于命令行传入参数
-            if len(sys.argv) != 4:
-                print(
-                    "Format error! Please enter in the following format: \n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]"
-                )
-                return False
-            else:
-                self.paths = sys.argv[1:4]
-                return True
+        if len(sys.argv) != 4:
+            print(
+                "Format error! Please enter in the following format: \n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]"
+            )
+            return False
+        else:
+            self.paths = sys.argv[1:4]
+            return True
 
     def open_file(self):
         """尝试打开路径对应的文件对象
