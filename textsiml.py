@@ -41,13 +41,12 @@ class TextSiml:
         try:
             orig_file = open(self.paths[0], mode="r", encoding="utf-8")
             siml_file = open(self.paths[1], mode="r", encoding="utf-8")
-            rst_file = open(self.paths[2], mode="w", encoding="utf-8")
         except IOError as e:
             print("Error opening file: ", e)
             return False
 
         print("File opened successfully.")
-        self.files = orig_file, siml_file, rst_file  # 记录打开的文件对象
+        self.files = orig_file, siml_file  # 记录打开的文件对象
 
         return True
 
@@ -82,7 +81,8 @@ class TextSiml:
         Returns:
             True: 函数正确执行完毕
         """
-        self.files[2].write("{0:.2f}".format(self.result))  # 强制保留两位小数
+        with open(self.paths[2], "w") as f:
+            f.write("{0:.2f}".format(self.result))  # 强制保留两位小数
         print("File written successfully.")
 
         return True
