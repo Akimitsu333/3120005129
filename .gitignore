@@ -1,4 +1,4 @@
 /venv
 /.vscode
-/source/result.txt
-/src/__pycache__
+/result.txt
+/__pycache__
