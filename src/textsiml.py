@@ -19,6 +19,7 @@ class TextSiml:
         """判断路径是否存在/传入
 
         Returns:
+            False: 执行过程出错
             True: 函数正确执行完毕
         """
         if self.paths == None:  # 默认路径优先级高于命令行传入参数
@@ -26,15 +27,16 @@ class TextSiml:
                 print(
                     "Format error! Please enter in the following format: \n\tpython main.py [原文文件] [抄袭版论文的文件] [答案文件]"
                 )
+                return False
             else:
                 self.paths = sys.argv[1:4]
-
-        return True
+                return True
 
     def open_file(self):
         """尝试打开路径对应的文件对象
 
         Returns:
+            False: 执行过程出错
             True: 函数正确执行完毕
         """
         try:
@@ -43,6 +45,8 @@ class TextSiml:
             rst_file = open(self.paths[2], mode="w", encoding="utf-8")
         except IOError as e:
             print("Error opening file: ", e)
+            return False
+
         print("File opened successfully.")
         self.files = orig_file, siml_file, rst_file  # 记录打开的文件对象
 
