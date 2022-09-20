@@ -1,5 +1,6 @@
 import unittest
 import textsiml
+import main
 import sys
 
 
@@ -16,7 +17,7 @@ class TestStudent(unittest.TestCase):
         with self.assertRaises(Exception) as cm:  # 参数格式错误会报错
             t1.get_path()
         self.assertIsNotNone(cm.exception)  # 判断是否有报错
-        sys.argv = [
+        sys.argv = [  # 模拟命令行参数
             "main.py",
             "source/orig.txt",
             "source/orig_0.8_dis_1.txt",
@@ -95,9 +96,15 @@ class TestStudent(unittest.TestCase):
         self.assertTrue(t1.start())  # 模块启动正常
         pass
 
-    # def test_(self):
-    #     """保留的可拓展函数"""
-    #     pass
+    def test_main(self):
+        sys.argv = [  # 模拟命令行参数
+            "main.py",
+            "source/orig.txt",
+            "source/orig_0.8_dis_1.txt",
+            "result.txt",
+        ]
+        self.assertTrue(main.main())  # 测试主入口
+        pass
 
 
 # 入口
