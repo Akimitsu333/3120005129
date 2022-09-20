@@ -4,7 +4,7 @@ import Levenshtein
 
 
 class TextSiml:
-    def __init__(self, paths=None):
+    def __init__(self, paths: tuple = None):
         self.paths = paths
         self.files = None
         self.strs = None
