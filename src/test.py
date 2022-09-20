@@ -1,21 +1,20 @@
 import unittest
-import cProfile
-from memory_profiler import profile
 
-from main import TextSiml
+from textsiml import TextSiml
 
 
 class TestStudent(unittest.TestCase):
     def test_time(self):
-        cProfile.run(
-            'TextSiml().start(["source/orig.txt", "source/orig_0.8_add.txt", "source/result.txt"])'
-        )
+        # os.system(
+        #     "python -m cProfile -s cumulative src/main.py source/orig.txt source/orig_0.8_add.txt source/result.txt"
+        # )
+        pass
 
-    @profile
     def test_memory(self):
-        TextSiml().start(
-            ["source/orig.txt", "source/orig_0.8_add.txt", "source/result.txt"]
-        )
+        # os.system(
+        #     "python -m memory_profiler src/main.py source/orig.txt source/orig_0.8_add.txt source/result.txt"
+        # )
+        pass
 
 
 if __name__ == "__main__":
