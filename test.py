@@ -1,35 +1,41 @@
-import re
 from fractions import Fraction
+from random import randrange, choice
+from re import sub, compile, findall, match
 
 
-def get_formula(file_path: str):
-    formula_dict = {}
-    with open(file_path, "r", encoding="UTF-8") as f:
-        for line_number, line in enumerate(f):
-            formula = re.match(r"[0-9]+\.\s(.*)\s?", line).group(1)
-
-            mixed_number_pattern = re.compile(r"([0-9]+)\'([0-9]+).([0-9]+)")
-            mixed_numbers = mixed_number_pattern.findall(formula)
-            if mixed_numbers:
-                for num in mixed_numbers:
-                    numerator = int(num[0]) * int(num[2]) + int(num[1])
-                    improper_fraction = (
-                        "Fraction(" + str(numerator) + "," + num[2] + ")"
-                    )
-                    formula = mixed_number_pattern.sub(improper_fraction, formula, 1)
-
-            proper_fraction_match = re.compile(r"([0-9]+)/([0-9]+)")
-            proper_fraction = proper_fraction_match.findall(formula)
-            if proper_fraction:
-                for num in proper_fraction:
-                    improper_fraction = "Fraction(" + num[0] + "," + num[1] + ")"
-                    formula = proper_fraction_match.sub(improper_fraction, formula, 1)
-
-            formula_dict[line_number] = formula
-
-    return formula_dict
+def _natural_number(r: int):
+    return str(randrange(r))
 
 
-resault_dict = get_formula("Exercises.txt")
-for key, formula in resault_dict.items():
-    print(eval(formula))
+def _mixed_number(r: int):
+    denominator = randrange(r)
+    return (
+        str(randrange(r - 1) + 1)
+        + "'"
+        + str(Fraction(randrange(denominator), denominator))
+    )
+
+
+def _proper_fraction(r: int):
+    denominator = randrange(r)
+    return str(Fraction(randrange(denominator), denominator))
+
+
+def generate(path: str, n: int, r: int):
+    number_type = [_natural_number, _mixed_number, _proper_fraction]
+    operator_type = [" + ", " - ", " * ", " / "]
+    with open(path, "w", encoding="UTF-8") as f:
+        for line in range(n):
+            formula = ""
+            operator_number = randrange(4)
+
+            for i in range(operator_number * 2 - 1):
+                if i % 2 == 0:
+                    formula = formula + choice(number_type)(r)
+                else:
+                    formula = formula + choice(operator_type)
+
+            f.write(str(line + 1) + ". " + formula + " = \n")
+
+
+generate("Exercises.txt", 10, 10)

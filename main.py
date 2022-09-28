@@ -1,6 +1,7 @@
-import argparse
 import re
-from fractions import Fraction
+import argparse
+from random import randrange
+from fractions import Fraction  # Forbidden to delete this import!
 
 
 def get_args():
@@ -11,20 +12,24 @@ def get_args():
     parser.add_argument("-a", type=str, default=None)
     args = parser.parse_args()
     if args.n is not None and args.r is None:
-        raise Exception("请重新输入，生成时必须输入: -r [数值范围]")
+        raise Exception(
+            "Please re-enter. You must enter like this when generating: -n [quantity] -r [value range]"
+        )
 
     return args
 
 
-def generate():
+def generate(n: int, r: int):
+
     pass
 
 
-def get_formula(file_path: str):
+def _get_formula(file_path: str, pattern: re.Pattern[str]):
     formula_dict = {}
     with open(file_path, "r", encoding="UTF-8") as f:
         for line_number, line in enumerate(f):
-            formula = re.match(r"[0-9]+\.\s(.*)\s?", line).group(1)
+            formula_origin = pattern.match(line).group(1)
+            formula = re.sub(r"÷", "/", formula_origin, 0)
 
             mixed_number_pattern = re.compile(r"([0-9]+)\'([0-9]+).([0-9]+)")
             mixed_numbers = mixed_number_pattern.findall(formula)
@@ -48,6 +53,15 @@ def get_formula(file_path: str):
     return formula_dict
 
 
+def get_formula(file_path: str, equal_sign: bool = True):
+    if equal_sign:
+        pattern = re.compile(r"[0-9]+\.\s(.*)\s\=")
+    else:
+        pattern = re.compile(r"[0-9]+\.\s(.*)\s*")
+
+    return _get_formula(file_path, pattern)
+
+
 def get_result(formula_dict: dict):
     result_dict = {}
     for index, formula in formula_dict.items():
@@ -66,7 +80,7 @@ def get_difference(exercises_path: str, answers_path: str):
     correct_index = set()
     wrong_index = set()
     exercises_result_dict = get_result(get_formula(exercises_path))
-    answers_result_dict = get_result(get_formula(answers_path))
+    answers_result_dict = get_result(get_formula(answers_path, False))
 
     for index, result in answers_result_dict.items():
         if result == exercises_result_dict.get(index):
