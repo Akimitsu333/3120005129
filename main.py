@@ -20,8 +20,8 @@ def generate():
     pass
 
 
-def get_formula(file_path, callback_func):
-    resault_dict = {}
+def get_formula(file_path: str):
+    formula_dict = {}
     with open(file_path, "r", encoding="UTF-8") as f:
         for line_number, line in enumerate(f):
             formula = re.match(r"[0-9]+\.\s(.*)\s?", line).group(1)
@@ -43,20 +43,31 @@ def get_formula(file_path, callback_func):
                     improper_fraction = "Fraction(" + num[0] + "," + num[1] + ")"
                     formula = proper_fraction_match.sub(improper_fraction, formula, 1)
 
-            # number = re.sub(
-            #     r"[0-9]+\'[0-9]+/[0-9]+",
-            #     numerator + "/" + number_3,
-            #     real_number,
-            # )
-            # resault_dict[num] = number
-            resault_dict[line_number] = formula
+            formula_dict[line_number + 1] = formula
 
-    return resault_dict
+    return formula_dict
 
 
-def caculate(formula):
-    result = eval(formula)
+def get_result(formula_dict: dict):
+    result_dict = {}
+    for index, formula in formula_dict.items():
+        result = eval(formula)
+        integer_result = int(result)
+        if integer_result != result:
+            result = str(integer_result) + "'" + str(result - integer_result)
+        else:
+            result = str(result)
+        result_dict[index] = result
+
+    return result_dict
+
+
+def switch_func():
+    pass
 
 
 if __name__ == "__main__":
-    get_args()
+    dict = get_formula("Exercises.txt")
+    result = get_result(dict)
+    print(result)
+    pass
