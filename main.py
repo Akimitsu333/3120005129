@@ -72,7 +72,7 @@ def _generate(r: int, operator_number: int):
         formula_1 = check(formula_1, r, 1)
 
         number_1 = choice(number_type)(r)
-        number_2 = choice(number_type)(r) + Fraction(1, r * 2)
+        number_2 = choice(number_type)(r)
         operator_1 = choice(operator_type)
         formula_2 = str(number_1) + operator_1 + str(number_2)
         formula_2 = check(formula_2, r, 1)
