@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from fractions import Fraction  # Forbidden to delete this import!
 from random import choice, randint
-from re import sub, search, compile, Pattern
+from re import sub, compile
 
 
 def get_args():
@@ -26,17 +26,21 @@ def get_args():
 
 
 def _natural_number(r: int):
-    return randint(1, r)
+    return str(randint(1, r))
 
 
 def _mixed_number(r: int):
     denominator = randint(2, r)
-    return randint(1, r - 1) + Fraction(randint(1, denominator - 1), denominator)
+    return (
+        "("
+        + str(randint(1, r - 1) + Fraction(randint(1, denominator - 1), denominator))
+        + ")"
+    )
 
 
 def _proper_fraction(r: int):
     denominator = randint(2, r)
-    return Fraction(randint(1, denominator - 1), denominator)
+    return "(" + str(Fraction(randint(1, denominator - 1), denominator)) + ")"
 
 
 def _generate(r: int, operator_number: int):
@@ -51,35 +55,39 @@ def _generate(r: int, operator_number: int):
     formula = None
 
     def check(formula: str, r: int, operator_number: int):
-        if eval(formula) <= 0:
+        result = eval(formula)
+        if result <= 0:
             return _generate(r, operator_number)
         return formula
 
     if operator_number == 1:
-        formula = str(number_1) + operator_1 + str(number_2)
-        return check(formula, r, 1)
+        formula = number_1 + operator_1 + number_2
+        formula = check(formula, r, 1)
 
     elif operator_number == 2:
-        formula = str(number_1) + operator_1 + str(number_2)
+        formula = number_1 + operator_1 + number_2
         formula = check(formula, r, 1)
 
         number_1 = choice(number_type)(r)
         operator_1 = choice(operator_type)
-        formula = str(number_1) + operator_1 + "(" + formula + ")"
-        return check(formula, r, 2)
+        formula = number_1 + operator_1 + "(" + formula + ")"
+        formula = check(formula, r, 2)
     elif operator_number == 3:
-        formula_1 = str(number_1) + operator_1 + str(number_2)
+        formula_1 = number_1 + operator_1 + number_2
         formula_1 = check(formula_1, r, 1)
 
         number_1 = choice(number_type)(r)
         number_2 = choice(number_type)(r)
         operator_1 = choice(operator_type)
-        formula_2 = str(number_1) + operator_1 + str(number_2)
+        formula_2 = number_1 + operator_1 + number_2
         formula_2 = check(formula_2, r, 1)
 
         operator_1 = choice(operator_type)
         formula = "(" + formula_1 + ")" + operator_1 + "(" + formula_2 + ")"
-        return check(formula, r, 3)
+        formula = check(formula, r, 3)
+
+    if eval(formula) < 0:
+        return _generate(r, operator_number)
 
     return formula
 
@@ -90,6 +98,14 @@ def generate(path: str, n: int, r: int):
         for index in range(1, n + 1):
             operator_number = randint(1, 3)
             formula = _generate(r, operator_number)
+            proper_fraction_match = compile("\([0-9]+/[0-9]+\)")
+            proper_fraction = proper_fraction_match.findall(formula)
+            if proper_fraction:
+                for num in proper_fraction:
+                    improper_fraction = num[1:-1]
+                    formula = sub(
+                        "\(" + improper_fraction + "\)", improper_fraction, formula, 1
+                    )
             proper_fraction_match = compile("([0-9]+)/([0-9]+)")
             proper_fraction = proper_fraction_match.findall(formula)
             if proper_fraction:
@@ -207,7 +223,7 @@ def write_result(file_path: str, result_dict: dict):
 
 
 if __name__ == "__main__":
-    # generate("Exercises.txt", 10000, 10)
+    generate("Exercises.txt", 10000, 10)
     dict = get_formula("Exercises.txt")
     write_result("Answers.txt", get_result(dict))
     # get_difference("Exercises.txt", "Answers_wrong.txt")
