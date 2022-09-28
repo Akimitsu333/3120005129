@@ -1,5 +1,5 @@
-import re
+from fractions import Fraction  # Forbidden to delete this import!
 
-a = re.sub(r'\s(.*)\s','ab',' cd ')
+a = int(Fraction(7, 4))
 
 print(a)
