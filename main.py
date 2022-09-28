@@ -111,11 +111,7 @@ def generate(path: str, n: int, r: int):
             f.write(str(index) + ". " + formula + " = \n")
 
 
-def _get_formula(line: str, pattern: Pattern[str]):
-    formula = pattern.match(line).group(1)
-    formula = sub("÷", "/", formula, 0)
-    formula = sub("×", "*", formula, 0)
-
+def _get_formula(formula: str):
     mixed_number_pattern = compile("([0-9]+)'([0-9]+).([0-9]+)")
     mixed_numbers = mixed_number_pattern.findall(formula)
     if mixed_numbers:
@@ -137,11 +133,18 @@ def _get_formula(line: str, pattern: Pattern[str]):
         for num in division:
             improper_fraction = "Fraction(" + num[0] + "," + num[1] + ")"
             formula = division_match.sub(improper_fraction, formula, 1)
+    division_match = compile("^(.*)\s/\s(\(.*\))")
+    division = division_match.findall(formula)
+    if division:
+        for num in division:
+            improper_fraction = "Fraction(" + num[0] + "," + num[1] + ")"
+            formula = division_match.sub(improper_fraction, formula, 1)
 
     return formula
 
 
 def get_formula(file_path: str, equal_sign: bool = True):
+    pattern = None
     if equal_sign:
         pattern = compile("[0-9]+\.\s(.*)\s\=")
     else:
@@ -149,7 +152,10 @@ def get_formula(file_path: str, equal_sign: bool = True):
     formula_dict = {}
     with open(file_path, "r", encoding="UTF-8") as f:
         for line_number, line in enumerate(f):
-            formula_dict[line_number + 1] = _get_formula(line, pattern)
+            formula = pattern.match(line).group(1)
+            formula = sub("÷", "/", formula, 0)
+            formula = sub("×", "*", formula, 0)
+            formula_dict[line_number + 1] = _get_formula(formula)
 
     return formula_dict
 
@@ -201,7 +207,7 @@ def write_result(file_path: str, result_dict: dict):
 
 
 if __name__ == "__main__":
-    generate("Exercises.txt", 10000, 10)
+    # generate("Exercises.txt", 10000, 10)
     dict = get_formula("Exercises.txt")
     write_result("Answers.txt", get_result(dict))
     # get_difference("Exercises.txt", "Answers_wrong.txt")
