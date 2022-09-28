@@ -62,6 +62,32 @@ def get_result(formula_dict: dict):
     return result_dict
 
 
+def get_difference(exercises_path: str, answers_path: str):
+    correct_index = set()
+    wrong_index = set()
+    exercises_result_dict = get_result(get_formula(exercises_path))
+    answers_result_dict = get_result(get_formula(answers_path))
+
+    for index, result in answers_result_dict.items():
+        if result == exercises_result_dict.get(index):
+            correct_index.add(index)
+        else:
+            wrong_index.add(index)
+
+    with open("Grade.txt", "w", encoding="UTF-8") as f:
+        f.write(
+            "Correct: "
+            + str(len(correct_index))
+            + " ( "
+            + str(correct_index)[1:-1]
+            + " )"
+            + "\n"
+        )
+        f.write(
+            "Wrong: " + str(len(wrong_index)) + " ( " + str(wrong_index)[1:-1] + " )"
+        )
+
+
 def switch_func():
     pass
 
@@ -70,4 +96,5 @@ if __name__ == "__main__":
     dict = get_formula("Exercises.txt")
     result = get_result(dict)
     print(result)
+    get_difference("Exercises.txt", "Answers_wrong.txt")
     pass
