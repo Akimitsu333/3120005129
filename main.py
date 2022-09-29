@@ -18,6 +18,7 @@ def get_args():
     elif args.r is not None:
         generate("Exercises.txt", args.n, args.r)
         write_result("Answers.txt", get_result(get_formula("Exercises.txt")))
+        return args
     if args.e is not None and args.a is not None:
         get_difference(args.e, args.a)
     else:
