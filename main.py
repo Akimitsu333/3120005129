@@ -7,7 +7,7 @@ from re import sub, compile
 def get_args():
     parser = ArgumentParser()
     parser.add_argument("-n", type=int, default=None)
-    parser.add_argument("-", type=int, default=None)
+    parser.add_argument("-r", type=int, default=None)
     parser.add_argument("-e", type=str, default=None)
     parser.add_argument("-a", type=str, default=None)
     args = parser.parse_args()
@@ -223,8 +223,4 @@ def write_result(file_path: str, result_dict: dict):
 
 
 if __name__ == "__main__":
-    generate("Exercises.txt", 10000, 10)
-    dict = get_formula("Exercises.txt")
-    write_result("Answers.txt", get_result(dict))
-    # get_difference("Exercises.txt", "Answers_wrong.txt")
-    pass
+    get_args()
